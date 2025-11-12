@@ -1,7 +1,7 @@
 :root {
-  --warning: orange;
   --text: black;
   --primary: #87afeb;
+  --orange: orange;
 }
 * {
   margin: 0;
@@ -11,19 +11,16 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 .card-profile {
+  margin: auto;
   padding: 20px;
   color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
   background: #f7f7f9;
   display: flex;
   justify-content: center;
-  width: 820px;
-  height: 320px;
+  max-width: 820px;
   border-top-left-radius: 60px;
   overflow: hidden;
-  display: flex;
   gap: 4px;
-  padding: 4px;
 }
 .photo {
   display: flex;
@@ -31,6 +28,7 @@ body {
   justify-content: center;
 }
 .photo img {
+  content: url("../25523204Grande.jpg");
   width: 250px;
   height: 320px;
   object-fit: cover;
@@ -44,10 +42,12 @@ body {
   gap: 4px;
   justify-content: space-between;
   padding: 10px;
+  font-size: 0.95rem;
 }
 .desc {
   font-family: "Arial", Times, serif;
   font-style: italic;
+  font-size: 1rem;
 }
 .container-list {
   display: flex;
@@ -61,16 +61,19 @@ body {
 }
 .name {
   margin-bottom: 10px;
-  font-size: 25px;
   font-weight: 500;
   color: var(--orange);
 }
 .email {
-  color: var(--warning);
+  color: var(--orange);
   text-decoration: none;
 }
 .email:active {
   color: red;
+}
+.name,
+.email {
+  font-size: 1rem;
 }
 
 header {
@@ -96,19 +99,17 @@ nav li {
   align-items: center;
   padding: 20px 30px;
   text-align: center;
+  font-size: 1.5rem;
 }
 .nav-title {
-  font-size: 24px;
   font-weight: bold;
   border-right: 1px solid #fff;
 }
 .nav-title span {
   margin-top: 10px;
-  font-size: 18px;
-  font-weight: normal;
 }
 .nav-greeting {
-  font-size: 18px;
+  font-size: 1.25rem;
 }
 .nav-search {
   border-left: 1px solid #fff;
@@ -116,14 +117,14 @@ nav li {
 .nav-search input {
   padding: 8px;
   border: 1px solid #ccc;
-  font-size: 14px;
+  font-size: 1rem;
 }
 .nav-search button {
   padding: 8px 12px;
   color: var(--primary);
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 1rem;
 }
 section {
   padding: 30px;
@@ -137,8 +138,11 @@ section {
 .student-grid li {
   background-color: #f7f7f9;
   padding: 10px;
-  text-align: center;
   box-shadow: 1.5px 1.5px 0 0 rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
   /* animation */
   transform-origin: center center;
   transition: all 0.3s ease-in-out;
@@ -151,9 +155,116 @@ section {
 }
 .student-grid img {
   height: 150px;
-  margin-bottom: 10px;
 }
 .student-grid p {
-  font-size: 16px;
+  font-size: 1.2rem;
   color: var(--primary);
+}
+#my-photo {
+  content: url("../25523204Grande.jpg");
+}
+
+/* 320px — 480px: Dispositivos móviles */
+@media (min-width: 320px) and (max-width: 480px) {
+  /* perfil */
+  .card-profile {
+    flex-direction: column;
+  }
+  @media (max-width: 768px) {
+    .photo img {
+      content: url("../25523204Pequena.jpg");
+    }
+  }
+  .desc {
+    font-size: 0.8rem;
+  }
+  .content {
+    font-size: 0.75rem;
+  }
+  .container-list {
+    padding: 4px;
+  }
+  .list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 4px;
+    border-bottom: 1px solid #c4c4c4;
+  }
+  /* index */
+  nav ul {
+    flex-direction: column; /* Apilar elementos verticalmente */
+    align-items: center;
+    padding: 10px 0;
+  }
+  nav li {
+    padding: 10px 0;
+    width: 90%;
+  }
+  .nav-title {
+    border-right: none;
+    border-bottom: 1px solid #fff;
+  }
+  .nav-search {
+    border-left: none;
+    border-top: 1px solid #fff;
+    padding-top: 10px;
+  }
+  .student-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  #my-photo {
+    content: url("../25523204Pequena.jpg");
+  }
+}
+
+/* 481px — 768px: iPads, tablets */
+@media (min-width: 481px) and (max-width: 768px) {
+  /* perfil */
+  .card-profile {
+    flex-direction: column;
+  }
+  .photo img {
+    content: url("../25523204Pequena.jpg");
+  }
+  .content {
+    padding: 5px;
+  }
+  /* index */
+  nav ul {
+    flex-direction: column;
+  }
+  nav li {
+    padding: 15px 20px;
+  }
+  .nav-title {
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+  }
+  .nav-search {
+    border-left: none;
+    border-top: 1px solid #fff;
+  }
+  .student-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  #my-photo {
+    content: url("../25523204Pequena.jpg");
+  }
+}
+
+/* 769px — 1024px: pantallas pequeñas, ordenadores portátiles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* index */
+  nav li {
+    padding: 15px 10px;
+  }
+  .student-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 1025px — 1200px: pantallas grandes, ordenadores de escritorio */
+@media (min-width: 1025px) and (max-width: 1200px) {
+  /* perfil */
 }
