@@ -65,6 +65,7 @@ body {
   color: var(--orange);
 }
 .email {
+  margin-left: 4px;
   color: var(--orange);
   text-decoration: none;
 }

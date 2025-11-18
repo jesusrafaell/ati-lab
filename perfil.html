@@ -9,38 +9,45 @@
     />
     <title>Jesus Hernandez</title>
     <link rel="stylesheet" href="./css/style.css" />
+
+    <script type="text/javascript" src="conf/configES.json" defer></script>
+
+    <script type="text/javascript" src="js/perfil.js" defer></script>
   </head>
   <body class="card-profile">
     <div class="photo">
-      <img alt="Foto de perfil 25523204" />
+      <img id="profile-photo" alt="Foto de perfil" />
     </div>
     <div class="content">
       <div>
-        <h2 class="name">Jesus Hernandez</h2>
-        <p class="desc"></p>
+        <h2 id="profile-name" class="name"></h2>
+        <p id="profile-desc" class="desc"></p>
       </div>
       <div class="container-list">
-        <div class="list"><span>Mi color favorito es:</span> <span></span></div>
         <div class="list">
-          <span>Mi libro favorito es:</span>
-          <span></span>
+          <span id="label-color"></span>
+          <span id="data-color"></span>
         </div>
         <div class="list">
-          <span>Estilo de música preferida es:</span>
-          <span></span>
+          <span id="label-book"></span>
+          <span id="data-book"></span>
         </div>
         <div class="list">
-          <span>Mis Videojuegos favoritos son:</span>
-          <span></span>
+          <span id="label-music"></span>
+          <span id="data-music"></span>
         </div>
         <div class="list">
-          <strong>Lenguajes aprendidos:</strong>
-          <strong></strong>
+          <span id="label-video"></span>
+          <span id="data-video"></span>
+        </div>
+        <div class="list">
+          <span id="label-languages"></span>
+          <span id="data-languages"></span>
         </div>
       </div>
       <p>
         Si necesitan comunicarse conmigo me pueden escribir a:
-        <a class="email" href="mailto:"></a>
+        <a id="profile-email" class="email" />
       </p>
     </div>
   </body>
