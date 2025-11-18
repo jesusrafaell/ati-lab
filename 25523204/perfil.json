@@ -1,0 +1,14 @@
+const perfil = {	
+	"nombre":"Jesus Hernandez",
+	"descripcion":"Soy un desarrollador de software. Actualmente trabajo como arquitecto de software en BluuData. Tengo más de 7 años de experiencia en el desarrollo web y espero tener tiempo este año para terminar la universidad.",
+	"color": "Negro",
+	"libro": ["Harry Potter y la piedra filosofal"],
+	"musica": ["Rock","Country"],
+	"video_juego": ["Valorant","Deashordonerd"],
+	"lenguajes": ["Golang", "Python", "TypeScript", "C++"],
+	"email":"jesusrafellh@gmail.com",
+	"ci": "25523204",
+	"genero":"masculino",
+	"fecha_nacimiento":"10/10/1996",
+	"imagen": "25523204.jpg"
+}
