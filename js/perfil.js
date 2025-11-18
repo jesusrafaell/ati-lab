@@ -1,12 +1,3 @@
-function getUrlParameter(name) {
-  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-  const regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
-  const results = regex.exec(location.search);
-  return results === null
-    ? null
-    : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
-
 function loadProfileScript(ci) {
   const script = document.createElement("script");
   script.src = `${ci}/perfil.json`;
@@ -83,14 +74,30 @@ function applyConfigToProfile() {
   console.log("Config Perfil");
 }
 
-function initializeProfile() {
-  const ci = getUrlParameter("ci");
+function initialize() {
+  const params = new URLSearchParams(location.search);
+  const ci = params.get("ci");
+  const lang = params.get("lang") || "ES";
+  lang = lang.toUpperCase();
 
-  applyConfigToProfile();
+  const validLang = ["ES", "EN", "PT"].includes(lang) ? lang : "ES";
 
-  if (ci) {
-    loadProfileScript(ci);
-  }
+  const configScript = document.createElement("script");
+  configScript.src = `conf/config${validLang}.json`;
+  configScript.type = "text/javascript";
+  configScript.defer = true;
+
+  configScript.onload = () => {
+    applyConfigToProfile();
+
+    if (ci) {
+      loadProfileScript(ci);
+    } else {
+      console.log("Error: Cedula not found");
+    }
+  };
+
+  document.head.appendChild(configScript);
 }
 
-window.addEventListener("DOMContentLoaded", initializeProfile);
+window.addEventListener("DOMContentLoaded", initialize);
