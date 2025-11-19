@@ -129,6 +129,13 @@ nav li {
 }
 section {
   padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.error-message {
+  color: var(--primary);
 }
 .student-grid {
   display: grid;

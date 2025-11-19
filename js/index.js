@@ -1,9 +1,23 @@
-function showStudents(listaPerfiles) {
+function showProfiles(profiles, query) {
   const grid = document.querySelector(".student-grid");
+  const mainSection = document.querySelector("section");
 
   grid.innerHTML = "";
 
-  listaPerfiles.forEach((perfil) => {
+  const existingError = mainSection.querySelector(".error-message");
+  if (existingError) {
+    existingError.remove();
+  }
+
+  if (profiles.length === 0) {
+    const errorMessage = document.createElement("p");
+    errorMessage.textContent = `${config.sin_resultados} ${query}`;
+    errorMessage.classList.add("error-message", "centered-message");
+    mainSection.appendChild(errorMessage);
+    return;
+  }
+
+  profiles.forEach((perfil) => {
     const listItem = document.createElement("li");
 
     const img = document.createElement("img");
@@ -18,6 +32,16 @@ function showStudents(listaPerfiles) {
 
     grid.appendChild(listItem);
   });
+}
+
+function filterProfiles(query) {
+  const normalizedQuery = query.toLowerCase().trim();
+
+  const filteredPerfiles = perfiles.filter((perfil) => {
+    return perfil.nombre.toLowerCase().includes(normalizedQuery);
+  });
+
+  showProfiles(filteredPerfiles, query);
 }
 
 function applyConfig() {
@@ -45,7 +69,18 @@ function applyConfig() {
   const footerParagraph = document.querySelector("footer p");
   footerParagraph.textContent = config.copyRight;
 
-  console.log("applyConfig");
+  const searchContainer = document.querySelector(".nav-search");
+
+  if (searchContainer && navSearchInput) {
+    searchContainer.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const query = navSearchInput.value;
+      console.log("Buscando:", query);
+      filterProfiles(query);
+    });
+  }
+
+  filterProfiles("");
 }
 
 function initialize() {
@@ -64,7 +99,7 @@ function initialize() {
 
   configScript.onload = () => {
     applyConfig();
-    showStudents(perfiles);
+    showProfiles(perfiles);
   };
 
   document.head.appendChild(configScript);
