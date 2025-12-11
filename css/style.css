@@ -28,7 +28,6 @@ body {
   justify-content: center;
 }
 .photo img {
-  content: url("../cedula/25523204Grande.jpg");
   width: 250px;
   height: 320px;
   object-fit: cover;
@@ -152,6 +151,7 @@ section {
   align-items: center;
   gap: 1rem;
   /* animation */
+  cursor: pointer;
   transform-origin: center center;
   transition: all 0.3s ease-in-out;
   position: relative;
@@ -168,9 +168,6 @@ section {
   font-size: 1.2rem;
   color: var(--primary);
 }
-#my-photo {
-  content: url("../cedula/25523204Grande.jpg");
-}
 
 /* 320px — 480px: Dispositivos móviles */
 @media (min-width: 320px) and (max-width: 480px) {
@@ -179,9 +176,6 @@ section {
     flex-direction: column;
   }
   @media (max-width: 768px) {
-    .photo img {
-      content: url("../cedula/25523204Pequena.jpg");
-    }
   }
   .desc {
     font-size: 0.8rem;
@@ -221,9 +215,6 @@ section {
   .student-grid {
     grid-template-columns: repeat(1, 1fr);
   }
-  #my-photo {
-    content: url("../cedula/25523204Pequena.jpg");
-  }
 }
 
 /* 481px — 768px: iPads, tablets */
@@ -231,9 +222,6 @@ section {
   /* perfil */
   .card-profile {
     flex-direction: column;
-  }
-  .photo img {
-    content: url("../cedula/25523204Pequena.jpg");
   }
   .content {
     padding: 5px;
@@ -255,9 +243,6 @@ section {
   }
   .student-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-  #my-photo {
-    content: url("../cedula/25523204Pequena.jpg");
   }
 }
 

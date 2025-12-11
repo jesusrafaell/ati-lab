@@ -5,6 +5,9 @@ function loadProfileScript(ci) {
   script.defer = true;
 
   script.onload = () => {
+    // debugger;
+    console.log("Arrow Function:", this.document);
+
     renderProfile(perfil);
     applyConfigToProfile();
   };
@@ -29,6 +32,8 @@ function renderProfile(data) {
     ? data.musica.join(", ")
     : data.musica;
   document.getElementById("data-music").textContent = music;
+  // debugger;
+  console.log("Contexto Función Normal:", this.music);
 
   const videoGames = Array.isArray(data.video_juego)
     ? data.video_juego.join(", ")
@@ -71,14 +76,18 @@ function applyConfigToProfile() {
     pElement.appendChild(phraseSpan);
     pElement.appendChild(emailAnchor);
   }
-  console.log("Config Perfil");
 }
 
 function initialize() {
+  // debugger;
+  console.log("Ambito global:", this);
+
   const params = new URLSearchParams(location.search);
   const ci = params.get("ci");
-  const lang = params.get("lang") || "ES";
-  lang = lang.toUpperCase();
+  let lang = params.get("lang") || "ES";
+  if (lang) {
+    lang = lang.toUpperCase();
+  }
 
   const validLang = ["ES", "EN", "PT"].includes(lang) ? lang : "ES";
 

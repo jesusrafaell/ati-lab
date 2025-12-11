@@ -30,6 +30,10 @@ function showProfiles(profiles, query) {
     listItem.appendChild(img);
     listItem.appendChild(nameParagraph);
 
+    listItem.addEventListener("click", () => {
+      window.location.href = `perfil.html?ci=${perfil.ci}`;
+    });
+
     grid.appendChild(listItem);
   });
 }
