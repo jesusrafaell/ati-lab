@@ -1,54 +1,37 @@
-function showProfiles(profiles, query) {
-  const grid = document.querySelector(".student-grid");
-  const mainSection = document.querySelector("section");
+let appState = {
+  lang: "ES",
+  config: null,
+  perfiles: [],
+  query: "",
+};
 
-  grid.innerHTML = "";
-
-  const existingError = mainSection.querySelector(".error-message");
-  if (existingError) {
-    existingError.remove();
-  }
-
-  if (profiles.length === 0) {
-    const errorMessage = document.createElement("p");
-    errorMessage.textContent = `${config.sin_resultados} ${query}`;
-    errorMessage.classList.add("error-message", "centered-message");
-    mainSection.appendChild(errorMessage);
-    return;
-  }
-
-  profiles.forEach((perfil) => {
-    const listItem = document.createElement("li");
-
-    const img = document.createElement("img");
-    img.src = perfil.imagen;
-    img.alt = `Foto de ${perfil.nombre}`;
-
-    const nameParagraph = document.createElement("p");
-    nameParagraph.textContent = perfil.nombre;
-
-    listItem.appendChild(img);
-    listItem.appendChild(nameParagraph);
-
-    listItem.addEventListener("click", () => {
-      window.location.href = `perfil.html?ci=${perfil.ci}`;
-    });
-
-    grid.appendChild(listItem);
-  });
+function getValidLang(raw) {
+  const up = (raw || "ES").toUpperCase();
+  return ["ES", "EN", "PT"].includes(up) ? up : "ES";
 }
 
-function filterProfiles(query) {
-  const normalizedQuery = query.toLowerCase().trim();
-
-  const filteredPerfiles = perfiles.filter((perfil) => {
-    return perfil.nombre.toLowerCase().includes(normalizedQuery);
+async function apiFetch(params) {
+  const url = new URL("/api", window.location.origin);
+  Object.entries(params || {}).forEach(([k, v]) => {
+    if (v !== undefined && v !== null && v !== "") {
+      url.searchParams.set(k, v);
+    }
   });
 
-  showProfiles(filteredPerfiles, query);
+  const resp = await fetch(url.toString(), {
+    credentials: "include",
+    headers: {
+      Accept: "application/json",
+    },
+  });
+
+  if (!resp.ok) {
+    throw new Error(`HTTP ${resp.status}`);
+  }
+  return resp.json();
 }
 
-function applyConfig() {
+function applyConfig(config) {
   document.title = `${config.sitio[0]}${config.sitio[1]} ${config.sitio[2]}`;
 
   const navTitle = document.querySelector(".nav-title");
@@ -72,43 +55,97 @@ function applyConfig() {
 
   const footerParagraph = document.querySelector("footer p");
   footerParagraph.textContent = config.copyRight;
+}
 
-  const searchContainer = document.querySelector(".nav-search");
+function showError(message) {
+  const mainSection = document.querySelector("section");
+  const existingError = mainSection.querySelector(".error-message");
+  if (existingError) {
+    existingError.textContent = message;
+  }
+}
 
-  if (searchContainer && navSearchInput) {
-    searchContainer.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const query = navSearchInput.value;
-      console.log("Buscando:", query);
-      filterProfiles(query);
+function renderProfiles(profiles, query) {
+  const grid = document.querySelector(".student-grid");
+  grid.innerHTML = "";
+
+  if (!profiles || profiles.length === 0) {
+    showError(`${appState.config.sin_resultados} ${query}`);
+    return;
+  }
+
+  showError("");
+  profiles.forEach((perfil) => {
+    const listItem = document.createElement("li");
+
+    const img = document.createElement("img");
+    img.src = perfil.imagen;
+    img.alt = `Foto de ${perfil.nombre}`;
+
+    const nameParagraph = document.createElement("p");
+    nameParagraph.textContent = perfil.nombre;
+
+    listItem.appendChild(img);
+    listItem.appendChild(nameParagraph);
+
+    listItem.addEventListener("click", () => {
+      const currentLang = appState.lang;
+      window.location.href = `perfil.py?ci=${perfil.ci}&lang=${currentLang}`;
+    });
+
+    grid.appendChild(listItem);
+  });
+}
+
+function filterAndRender(query) {
+  const normalizedQuery = (query || "").toLowerCase().trim();
+  const filtered = appState.perfiles.filter((p) =>
+    p.nombre.toLowerCase().includes(normalizedQuery)
+  );
+  renderProfiles(filtered, query);
+}
+
+async function loadData(lang) {
+  try {
+    const data = await apiFetch({ lang });
+    appState.lang = data.lang;
+    appState.config = data.config;
+    appState.perfiles = data.perfiles || [];
+    applyConfig(appState.config);
+    filterAndRender(appState.query);
+  } catch (error) {
+    console.error("Error loading data:", error);
+    showError("Error al cargar los datos");
+  }
+}
+
+async function initialize() {
+  const params = new URLSearchParams(location.search);
+  const lang = getValidLang(params.get("lang") || "ES");
+  appState.lang = lang;
+
+  const langSelect = document.getElementById("lang-select");
+  if (langSelect) {
+    langSelect.value = lang;
+    langSelect.addEventListener("change", (e) => {
+      appState.lang = getValidLang(e.target.value);
+      loadData(appState.lang);
     });
   }
 
-  filterProfiles("");
-}
+  const navSearchInput = document.querySelector(
+    '.nav-search input[type="text"]'
+  );
+  const searchContainer = document.querySelector(".nav-search");
+  if (searchContainer && navSearchInput) {
+    searchContainer.addEventListener("submit", (e) => {
+      e.preventDefault();
+      appState.query = navSearchInput.value;
+      filterAndRender(appState.query);
+    });
+  }
 
-function initialize() {
-  const params = new URLSearchParams(location.search);
-  let lang = params.get("lang") || "ES";
-  lang = lang.toUpperCase();
-
-  const validLang = ["ES", "EN", "PT"].includes(lang) ? lang : "ES";
-
-  console.log(validLang);
-
-  const configScript = document.createElement("script");
-  configScript.src = `conf/config${validLang}.json`;
-  configScript.type = "text/javascript";
-  configScript.defer = true;
-
-  configScript.onload = () => {
-    applyConfig();
-    showProfiles(perfiles);
-  };
-
-  document.head.appendChild(configScript);
-
-  console.log("Configuración");
+  await loadData(lang);
 }
 
 window.addEventListener("DOMContentLoaded", initialize);
